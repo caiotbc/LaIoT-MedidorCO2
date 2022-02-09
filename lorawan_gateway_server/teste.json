@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "network": "358b679dd88d47948f6e108677b4b79a",
+    "gateway": "b0fd0b7000ee0000",
+    "device": "53a71c8b4f3f58c5",
+    "device_addr": "661e70e5",
+    "history": true,
+    "application": "b67b8dd7077b5802",
+    "packet_id": "f920e344226ddc844cc2552b13dfbe4b",
+    "packet_hash": "8c98c9e69af2e19816c3b8779a5e5067",
+    "time": 1644431637.482
+  },
+  "params": {
+    "rx_time": 1644431637.3037317,
+    "counter_up": 12673,
+    "port": 10,
+    "encrypted_payload": "cKczlBwJ",
+    "payload": "AZAKKBZE",
+    "radio": {
+      "time": 1644431637.3037317,
+      "gps_time": 1328466855265,
+      "freq": 915.8,
+      "modulation": {
+        "type": "LORA",
+        "bandwidth": 125000,
+        "spreading": 12,
+        "coderate": "4/5"
+      },
+      "hardware": {
+        "chain": 0,
+        "channel": 3,
+        "tmst": 3729092148,
+        "status": 1,
+        "rssi": -119,
+        "snr": -17.5,
+        "gps": {
+          "lat": -22.43890953063965,
+          "lng": -45.446128845214844,
+          "alt": 1111
+        }
+      },
+      "datarate": 0,
+      "delay": 0.07546687126159668,
+      "size": 19
+    },
+    "lora": {
+      "mac_commands": [],
+      "header": {
+        "ack": false,
+        "adr": true,
+        "confirmed": false,
+        "type": 2,
+        "version": 0,
+        "adr_ack_req": false,
+        "class_b": false
+      }
+    },
+    "duplicate": false
+  },
+  "type": "uplink",
+  "id": "1644436814206-0"
+}
