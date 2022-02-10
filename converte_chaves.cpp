@@ -9,12 +9,12 @@ int main()
 {
     string dev_eui, app_eui, app_key, abp_appskey, abp_nwkskey;
     //cin >> dev_eui;
-    dev_eui = "6c43741445c7d040";
+    dev_eui = "1ceb9da836c4ae3f";
     app_eui = "5b17cfc3d32248c6";
     app_key = "0bb480f284fea8d061ddd922f50545dd";
 
-    abp_nwkskey = "42def0c2b4ca58be29e3860ed3f89ce8";
-    abp_appskey = "a2a390aac8327f05e17a6a91dc8b4cd1";
+    abp_nwkskey = "4990f4c7105cc5c648660a5d6da60415";
+    abp_appskey = "173c8a61efa1cd9faf73505dd4834b1f";
 
     if(OTAA==1)
     {

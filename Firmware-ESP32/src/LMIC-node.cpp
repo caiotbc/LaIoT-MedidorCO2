@@ -58,8 +58,8 @@
 //  ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀   ▀▀▀ ▀▀▀ ▀▀  ▀▀▀   ▀▀  ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀
 
 
-const uint8_t payloadBufferLength = 4;    // Adjust to fit max payload length
-
+const uint8_t payloadBufferLength = 6;    // Adjust to fit max payload length
+DHT dht(PA1, DHT11);
 
 //  █ █ █▀▀ █▀▀ █▀▄   █▀▀ █▀█ █▀▄ █▀▀   █▀▀ █▀█ █▀▄
 //  █ █ ▀▀█ █▀▀ █▀▄   █   █ █ █ █ █▀▀   █▀▀ █ █ █ █
@@ -515,6 +515,25 @@ void initLmic(bit_t adrEnabled = 1,
                 LMIC_setDrTxpow(DR_SF12, 20);
         #endif
     }
+    else
+    {
+         for (int b=0; b<8; ++b) 
+                LMIC_disableSubBand(b);
+
+                LMIC_enableChannel(0); // 915.2 MHz
+                LMIC_enableChannel(1); // 915.4 MHz
+                LMIC_enableChannel(2); // 915.6 MHz
+                LMIC_enableChannel(3); // 915.8 MHz
+                LMIC_enableChannel(4); // 916.0 MHz
+                LMIC_enableChannel(5); // 916.2 MHz
+                LMIC_enableChannel(6); // 916.4 MHz
+
+                 LMIC.dn2Dr = DR_SF12CR;
+
+                /* Configura data rate de transmissão e ganho do rádio
+                LoRa (dBm) na transmissão */
+                LMIC_setDrTxpow(DR_SF12, 20);
+    }
 
     // Relax LMIC timing if defined
     #if defined(LMIC_CLOCK_ERROR_PPM)
@@ -784,12 +803,26 @@ void processWork(ostime_t doWorkJobTimeStamp)
         {
             // Prepare uplink payload.
             uint8_t fPort = 10;
-            uint16_t value = analogRead(12);
-            serial.print("sensor: ");
+            uint16_t value = analogRead(PA0);
+            //float h = dht.readHumidity();
+            //float t = dht.readTemperature();
+            float h = 1000;
+            float t = 1000;
+            serial.print("co2: ");
             serial.println(value);
+            serial.print("h: ");
+            serial.println(h);
+            serial.print("t: ");
+            serial.println(t);
+            uint16_t temperature = t*100;
+            uint16_t humidity = h*100;
             payloadBuffer[0] = value >> 8;
             payloadBuffer[1] = (uint8_t) value;
-            uint8_t payloadLength = 2;
+            payloadBuffer[2] = temperature >> 8;
+            payloadBuffer[3] = (uint8_t) temperature;
+            payloadBuffer[4] = humidity >> 8;
+            payloadBuffer[5] = (uint8_t) humidity;
+            uint8_t payloadLength = 6;
 
             scheduleUplink(fPort, payloadBuffer, payloadLength);
         }
@@ -831,7 +864,7 @@ void setup()
 {
     // boardInit(InitType::Hardware) must be called at start of setup() before anything else.
     bool hardwareInitSucceeded = boardInit(InitType::Hardware);
-
+    dht.begin();
     #ifdef USE_DISPLAY 
         initDisplay();
     #endif
