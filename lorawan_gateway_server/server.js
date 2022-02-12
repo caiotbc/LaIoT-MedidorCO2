@@ -16,6 +16,7 @@ const client = mqtt.connect(connectUrl, {
 })
 
 const topic = 'test/message'
+const aionedge = 'aiontheedge'
 client.on('connect', () => {
   console.log('Connected')
   client.subscribe([topic], () => {
@@ -28,8 +29,10 @@ let devices =
 {
     medidor1ID : "661e70e5",
     medidor1Token : "4Pvx54FMyH2A4PSgcwv3",
-    medidor2ID : "a82f70be",
-    medidor2Token : "3SGJjIFXUsDAzSTEW7XU"
+    medidor2ID : "54f74976",
+    medidor2Token : "3SGJjIFXUsDAzSTEW7XU",
+    medidor3ID : "530d4623",
+    medidor3Token : "zTQIiaOkob1w5wrl2LTF"
 }
 
 client.on('message', (topic, payload) => {
@@ -44,8 +47,9 @@ client.on('message', (topic, payload) => {
     decoded = buff.toString('hex');
     //console.log(decoded);
     co2 = parseInt(decoded.substring(0, 4) , 16);
-    temperatura = parseInt(decoded.substring(4, 8),16);
-    umidade = parseInt(decoded.substring(8, 12),16);
+    co2 = (co2/4096)*3.3;
+    temperatura = parseInt(decoded.substring(4, 8),16)/100;
+    umidade = parseInt(decoded.substring(8, 12),16)/100;
     console.log("CO2 = " , co2);
     console.log("Temp = " , temperatura);
     console.log("Humi = " , umidade);
@@ -59,17 +63,31 @@ client.on('message', (topic, payload) => {
     if(obj.meta.device_addr==devices.medidor1ID)
     {
         data = JSON.stringify({
-            mgas: co2
+            mgas: co2,
+            mtmp: temperatura,
+            mhum: umidade
         })
         path = devices.medidor1Token;
     }
     else if(obj.meta.device_addr==devices.medidor2ID)
     {
         data = JSON.stringify({
-            mgas: co2
+            mgas: co2,
+            mtmp: temperatura,
+            mhum: umidade
         })
         path = devices.medidor2Token;
     }
+    else if(obj.meta.device_addr==devices.medidor3ID)
+    {
+        data = JSON.stringify({
+            mgas: co2,
+            mtmp: temperatura,
+            mhum: umidade
+        })
+        path = devices.medidor3Token;
+    }
+    
     
         const options = {
         hostname: 'monitordeenergia.ml',
