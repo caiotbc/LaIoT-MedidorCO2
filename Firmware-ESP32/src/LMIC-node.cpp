@@ -57,14 +57,14 @@
 //  █ █ ▀▀█ █▀▀ █▀▄   █   █ █ █ █ █▀▀   █▀▄ █▀▀ █ █  █  █ █
 //  ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀   ▀▀▀ ▀▀▀ ▀▀  ▀▀▀   ▀▀  ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀
 
-
+#define CO2_SENSOR_PIN 12
+#define DHT_SENSOR_PIN 13
 const uint8_t payloadBufferLength = 6;    // Adjust to fit max payload length
-DHT dht(PA1, DHT11);
+DHT dht(DHT_SENSOR_PIN, DHT22);
 
 //  █ █ █▀▀ █▀▀ █▀▄   █▀▀ █▀█ █▀▄ █▀▀   █▀▀ █▀█ █▀▄
 //  █ █ ▀▀█ █▀▀ █▀▄   █   █ █ █ █ █▀▀   █▀▀ █ █ █ █
 //  ▀▀▀ ▀▀▀ ▀▀▀ ▀ ▀   ▀▀▀ ▀▀▀ ▀▀  ▀▀▀   ▀▀▀ ▀ ▀ ▀▀ 
-
 
 uint8_t payloadBuffer[payloadBufferLength];
 static osjob_t doWorkJob;
@@ -803,11 +803,11 @@ void processWork(ostime_t doWorkJobTimeStamp)
         {
             // Prepare uplink payload.
             uint8_t fPort = 10;
-            uint16_t value = analogRead(PA0);
-            //float h = dht.readHumidity();
-            //float t = dht.readTemperature();
-            float h = 1000;
-            float t = 1000;
+            uint16_t value = analogRead(CO2_SENSOR_PIN);
+            float h = dht.readHumidity();
+            float t = dht.readTemperature();
+            //float h = 1000;
+            //float t = 1000;
             serial.print("co2: ");
             serial.println(value);
             serial.print("h: ");

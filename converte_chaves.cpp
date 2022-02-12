@@ -13,8 +13,8 @@ int main()
     app_eui = "5b17cfc3d32248c6";
     app_key = "0bb480f284fea8d061ddd922f50545dd";
 
-    abp_nwkskey = "4990f4c7105cc5c648660a5d6da60415";
-    abp_appskey = "173c8a61efa1cd9faf73505dd4834b1f";
+    abp_nwkskey = "9681ada523542302e2b36029ce8c3f63";
+    abp_appskey = "6dfafa89be06c309f090c739669f7288";
 
     if(OTAA==1)
     {
