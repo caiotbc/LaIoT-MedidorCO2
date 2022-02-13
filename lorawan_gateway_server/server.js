@@ -25,6 +25,15 @@ client.on('connect', () => {
 
 })
 
+// client.on('connect', () => {
+//   console.log('Connected')
+//   client.subscribe([aionedge], () => {
+//     console.log(`Subscribe to topic '${aionedge}'`)
+//   })
+// 
+// })
+
+
 let devices = 
 {
     medidor1ID : "661e70e5",
@@ -32,8 +41,16 @@ let devices =
     medidor2ID : "54f74976",
     medidor2Token : "3SGJjIFXUsDAzSTEW7XU",
     medidor3ID : "530d4623",
-    medidor3Token : "zTQIiaOkob1w5wrl2LTF"
+    medidor3Token : "zTQIiaOkob1w5wrl2LTF",
+    medidor4ID : "37033f9b",
+    medidor4Token : "DcsmZm8m229qBwklca6o"
 }
+
+client.on('message', (aionedge, payload) => {
+    console.log("AI ON EDGE CONECTADO");
+    console.log(payload)
+    
+})
 
 client.on('message', (topic, payload) => {
   //console.log('Received Message:', topic, payload.toString())
@@ -46,8 +63,8 @@ client.on('message', (topic, payload) => {
     let buff = Buffer.from(obj.params.payload, 'base64'); 
     decoded = buff.toString('hex');
     //console.log(decoded);
-    co2 = parseInt(decoded.substring(0, 4) , 16);
-    co2 = (co2/4096)*3.3;
+    analog = parseInt(decoded.substring(0, 4) , 16);
+    co2 = (analog/4096)*3.3;
     temperatura = parseInt(decoded.substring(4, 8),16)/100;
     umidade = parseInt(decoded.substring(8, 12),16)/100;
     console.log("CO2 = " , co2);
@@ -63,6 +80,7 @@ client.on('message', (topic, payload) => {
     if(obj.meta.device_addr==devices.medidor1ID)
     {
         data = JSON.stringify({
+            mgasanalog: analog,
             mgas: co2,
             mtmp: temperatura,
             mhum: umidade
@@ -72,6 +90,7 @@ client.on('message', (topic, payload) => {
     else if(obj.meta.device_addr==devices.medidor2ID)
     {
         data = JSON.stringify({
+            mgasanalog: analog,
             mgas: co2,
             mtmp: temperatura,
             mhum: umidade
@@ -81,11 +100,22 @@ client.on('message', (topic, payload) => {
     else if(obj.meta.device_addr==devices.medidor3ID)
     {
         data = JSON.stringify({
+            mgasanalog: analog,
             mgas: co2,
             mtmp: temperatura,
             mhum: umidade
         })
         path = devices.medidor3Token;
+    }
+    else if(obj.meta.device_addr==devices.medidor4ID)
+    {
+        data = JSON.stringify({
+            mgasanalog: analog,
+            mgas: co2,
+            mtmp: temperatura,
+            mhum: umidade
+        })
+        path = devices.medidor4Token;
     }
     
     
